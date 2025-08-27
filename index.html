@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+  <header>
+    <div class="brand">
+      <div class="logo">SSP</div>
+      <div>
+        <h1>Smart Study Planner</h1>
+        <p class="subtitle">Tasks • Notes • Planner — Mobile-first, local storage</p>
+      </div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:20pxpx;align-items:center">
+      <input id="searchInput" type="search" placeholder="Search tasks or notes..." style="min-width:160px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit">
+      <button class="btn" id="suggestBtn" title="Suggest daily plan">Suggest plan</button>
+    </div>
+    <button id="mode-toggle">🌙 Dark Mode</button>
+  </header>
+
+  <main>
+    <section class="summary">
+      <div class="card">
+        <h3 id="countAll">0</h3>
+        <p>Total tasks</p>
+      </div>
+      <div class="card">
+        <h3 id="countPending">0</h3>
+        <p>Pending</p>
+      </div>
+      <div class="card">
+        <h3 id="countCompleted">0</h3>
+        <p>Completed</p>
+      </div>
+      <div class="card">
+        <h3 id="nextDue">—</h3>
+        <p>Next deadline</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <aside class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>Tasks</strong>
+          <div class="controls">
+            <button class="btn" id="filterBtn">Filter</button>
+            <button class="primary" id="addTaskBtn">+ New Task</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+          <select id="filterCategory">
+            <option value="all">All categories</option>
+          </select>
+          <select id="filterPriority">
+            <option value="all">All priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <input type="date" id="filterDate">
+          <button class="btn" id="clearFilters">Clear</button>
+        </div>
+
+        <div class="task-list" id="taskList" aria-live="polite"></div>
+
+        <hr style="border:0;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn" id="exportBtn">Export JSON</button>
+          <button class="btn" id="exportCSVBtn">Export CSV</button>
+          <input id="importFile" type="file" accept="application/json" style="display:none">
+          <button class="btn" id="importBtn">Import JSON</button>
+        </div>
+
+      </aside>
+
+      <div class="editor panel">
+        <div class="top">
+          <div>
+            <strong id="taskTitlePreview">Select a task or create one</strong>
+            <div class="small muted" id="taskInfoPreview">—</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="small muted">Risk: <span id="riskLabel">—</span></div>
+            <button class="btn" id="addNoteBtn">+ Note</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="flex:1">
+            <div class="toolbar" id="richToolbar">
+              <button data-cmd="bold"><b>B</b></button>
+              <button data-cmd="italic"><i>I</i></button>
+              <button data-cmd="insertUnorderedList">• List</button>
+              <button data-cmd="createLink">Link</button>
+              <button data-cmd="insertDate">Date</button>
+            </div>
+            <div class="note-area fade" id="noteEditor" contenteditable="true" aria-label="Rich text note editor">Click a task then write notes here... </div>
+          </div>
+          <div style="width:180px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="small muted">Category</label>
+              <select id="noteCategory">
+                <option value="general">General</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+              <button class="btn" id="saveNoteBtn">Save Note</button>
+              <button class="btn" id="deleteNoteBtn">Delete Note</button>
+            </div>
+            <textarea id="notePreview" placeholder="Note preview (plain text)" class="hidden"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Timeline</strong>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    plan your study with smart study Planner
+  </footer>
+
+  <!-- Modal for adding/editing tasks -->
+  <div class="modal" id="modal">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <h3 id="modalTitle">New Task</h3>
+      <div class="form-row">
+        <input id="taskTitle" placeholder="Task title">
+      </div>
+      <div class="form-row">
+        <input id="taskTopic" placeholder="Topic / Subject">
+        <select id="taskPriority">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input id="taskDue" type="date">
+        <input id="taskCategory" placeholder="Category (e.g. Math, CS)">
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+        <button class="btn" id="cancelModal">Cancel</button>
+        <button class="primary" id="saveTaskBtn">Save</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
